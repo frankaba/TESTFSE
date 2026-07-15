@@ -1,0 +1,2 @@
+Metti qui i fascicoli orario delle linee ferroviarie scaricati da
+www.fssudest.it (un PDF per linea), poi lancia: python3 aggiorna.py

@@ -1,0 +1,20 @@
+{
+  "arrivo_dopo_partenza": 0,
+  "attraversamenti_hub_senza_confine": 470,
+  "confini_dedotti": 92,
+  "corse_con_trasbordo": 74,
+  "corse_magre": 0,
+  "corse_totali": 648,
+  "fermate_bus": 642,
+  "note": 4,
+  "orari_non_monotoni": 5,
+  "orari_scritti_col_punto": 1,
+  "orari_totali": 11603,
+  "orari_valore_divergente": 1,
+  "segmenti_bus": 401,
+  "segmenti_treno": 415,
+  "stazioni": 89,
+  "tabelle": 66,
+  "transiti": 6454,
+  "transiti_ripetuti": 3
+}
