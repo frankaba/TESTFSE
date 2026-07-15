@@ -172,7 +172,7 @@ footer{margin:44px 0 30px;padding:18px 0 0;border-top:1px solid var(--filo);
     </div>
     <div class="riga2">
       <div class="campo"><label for="data">Giorno</label><input id="data" type="date"></div>
-      <div class="campo"><label for="ora">Dalle</label><input id="ora" type="time" step="3600"></div>
+      <div class="campo"><label for="ora">Dalle</label><select id="ora"></select></div>
     </div>
     <button class="azione" id="vai">Cerca</button>
     <div class="esito" id="esito"></div>
@@ -186,7 +186,7 @@ footer{margin:44px 0 30px;padding:18px 0 0;border-top:1px solid var(--filo);
     </div>
     <div class="riga2">
       <div class="campo"><label for="data2">Giorno</label><input id="data2" type="date"></div>
-      <div class="campo"><label for="ora2">Dalle</label><input id="ora2" type="time" step="3600"></div>
+      <div class="campo"><label for="ora2">Dalle</label><select id="ora2"></select></div>
     </div>
     <div class="esito" id="esito2"></div>
   </section>
@@ -569,10 +569,28 @@ const oggi = new Date();
 const isoOggi = new Date(oggi.getTime() - oggi.getTimezoneOffset() * 6e4)
   .toISOString().slice(0, 10);
 const oraOra = String(oggi.getHours()).padStart(2, "0") + ":00";
-/* il picker nativo si apre solo sull'iconcina: lo apro da tutto il campo */
-for (const inp of document.querySelectorAll('input[type=date],input[type=time]')) {
+/* Tendine delle ore: solo ore piene, niente minuti (il campo time nativo
+   mostra comunque i minuti su molti browser, la select no) */
+for (const id of ["ora", "ora2"]) {
+  const sel = $(id);
+  sel.innerHTML = Array.from({ length: 24 }, (_, h) =>
+    '<option value="' + String(h).padStart(2, "0") + ':00">' +
+    String(h).padStart(2, "0") + ':00</option>').join("");
+  sel.value = oraOra;
+}
+
+/* Il picker nativo si apre solo sull'iconcina: lo apro da tutto il campo.
+   Ma NON sulla zona dell'iconcina stessa: li' il browser lo apre gia' da
+   solo, e richiamare showPicker() nello stesso click lo fa aprire e
+   richiudere all'istante (sembra rotto). */
+for (const inp of document.querySelectorAll('input[type=date]')) {
   inp.style.cursor = "pointer";
-  inp.addEventListener("click", () => { if (inp.showPicker) try { inp.showPicker(); } catch (e) {} });
+  inp.addEventListener("click", e => {
+    if (!inp.showPicker) return;
+    const r = inp.getBoundingClientRect();
+    if (r.right - e.clientX < 40) return;   /* zona icona: fa da sola */
+    try { inp.showPicker(); } catch (err) {}
+  });
 }
 $("data").value = isoOggi; $("ora").value = oraOra;
 $("data2").value = isoOggi; $("ora2").value = oraOra;
